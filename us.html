@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Gyan Bhandar</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(120deg, #87CEEB, #1E3A8A);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            text-align: center;
+            color: #333;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            color: #1E3A8A;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        h2 {
+            color: #1E3A8A;
+            font-size: 1.8em;
+            margin-top: 20px;
+        }
+        p, li {
+            line-height: 1.6;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #444;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li::before {
+            content: '\2022';
+            color: #1E3A8A;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #1E3A8A;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Gyan Bhandar</h1>
+        <p><span class="highlight">Gyan Bhandar</span> is an innovative online bookstore designed for passionate readers, students, and professionals seeking knowledge. Our collection spans across numerous categories, offering books for all age groups and interests.</p>
+        
+        <h2>Our Vision</h2>
+        <p>We aspire to create a digital haven for book lovers, where knowledge is just a click away. Our aim is to make reading accessible, enjoyable, and affordable for everyone.</p>
+        
+        <h2>Why Choose Us?</h2>
+        <ul>
+            <li>Curated collection of books in diverse genres such as Fiction, Non-Fiction, Academic, and more.</li>
+            <li>Seamless user experience with powerful search and sorting features.</li>
+            <li>Exclusive discounts, membership benefits, and seasonal sales.</li>
+            <li>Secure and hassle-free checkout process with multiple payment options.</li>
+            <li>Fast shipping and excellent customer support for a smooth shopping experience.</li>
+        </ul>
+        
+        <h2>Join Our Community</h2>
+        <p>At <span class="highlight">Gyan Bhandar</span>, we don’t just sell books; we build a reading community. Follow us on social media and subscribe to our newsletter for the latest updates, book recommendations, and special discounts.</p>
+        
+        <h2>Contact Us</h2>
+        <p>If you have any queries or need assistance, feel free to reach out to us at <span class="highlight">support@gyanbhandar.com</span>.</p>
+    </div>
+</body>
+</html>

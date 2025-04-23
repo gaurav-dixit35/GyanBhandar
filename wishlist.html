@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Wishlist</title>
+  <link rel="stylesheet" href="shop.css" />
+  <style>
+    .book {
+      padding: 15px;
+      margin: 15px auto;
+      width: 90%;
+    }
+    .book .remove-wishlist {
+      background: none;
+      border: none;
+      color: crimson;
+      font-size: 20px;
+      cursor: pointer;
+      align-self: flex-start;
+    }
+    .add-to-cart {
+      background: #0000CD;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-left: 10px;
+    }
+    .add-to-cart:hover {
+      background: mediumblue;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-top">
+      <div class="nav-brand">Your Wishlist</div>
+    </div>
+    <div class="nav-buttons">
+      <button onclick="location.href='shop.html'">Back</button>
+      <div style="display: flex; gap: 10px;">
+        <button onclick="location.href='wishlist.html'">
+          ❤️ <span class="wishlist-counter" id="wishlist-count"></span>
+        </button>
+        <button onclick="location.href='cart.html'">
+          🛒
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="shop-container">
+    <div class="book-list" id="wishlist-list" style="margin: auto; width: 80%;"></div>
+  </div>
+
+  <script>
+    const wishlistContainer = document.getElementById("wishlist-list");
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function updateCartStorage() {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+
+    function renderWishlist() {
+      wishlistContainer.innerHTML = "";
+
+      if (wishlist.length === 0) {
+        wishlistContainer.innerHTML = '<p style="text-align:center; font-size: 1.2em; color: gray;">Your wishlist is empty 🖤</p>';
+        return;
+      }
+
+      wishlist.forEach(book => {
+        const stars = Math.floor(book.rating || 4);
+        const half = book.rating % 1 >= 0.5 ? "★" : "";
+        const starHTML = "★".repeat(stars) + half + "☆".repeat(5 - stars - (half ? 1 : 0));
+
+        const inCart = cart.some(item => item.id == book.id);
+
+        const bookDiv = document.createElement("div");
+        bookDiv.classList.add("book");
+        bookDiv.innerHTML = `
+          <div style="display: flex; gap: 20px;">
+            <img src="${book.image}" alt="${book.title}" style="width: 100px;">
+            <div class="book-details">
+              <div>
+                <span class="badge">${book.category || ''}</span>
+                <h4>${book.title}</h4>
+                <p class="desc">${book.description || ''}</p>
+              </div>
+              <div class="book-bottom">
+                <div class="star-rating">${starHTML}</div>
+                <div class="price-cart">
+                  <p>Price: ₹${book.price}</p>
+                  <div style="display: flex; align-items: center;">
+                    <button class="remove-wishlist" data-id="${book.id}" title="Remove">❌</button>
+                    <button class="add-to-cart" data-id="${book.id}" data-title="${book.title}" data-price="${book.price}" data-image="${book.image}" ${inCart ? "disabled" : ""}>${inCart ? "Added" : "Add to Cart"}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        wishlistContainer.appendChild(bookDiv);
+      });
+    }
+
+    document.addEventListener("click", function(event) {
+      if (event.target.classList.contains("remove-wishlist")) {
+        const id = event.target.dataset.id;
+        wishlist = wishlist.filter(item => item.id != id);
+        localStorage.setItem("wishlist", JSON.stringify(wishlist));
+        renderWishlist();
+  showToast('Added to cart and removed from wishlist!');
+      }
+
+      if (event.target.classList.contains("add-to-cart")) {
+  const id = event.target.dataset.id;
+  const book = {
+    id,
+    title: event.target.dataset.title,
+    price: event.target.dataset.price,
+    image: event.target.dataset.image
+  };
+  cart.push(book);
+  updateCartStorage();
+  wishlist = wishlist.filter(item => item.id != id);
+  localStorage.setItem("wishlist", JSON.stringify(wishlist));
+  renderWishlist();
+}
+      }
+    );
+
+    renderWishlist();
+  function showToast(message) {
+  const toast = document.createElement('div');
+  toast.textContent = message;
+  toast.style.position = 'fixed';
+  toast.style.bottom = '20px';
+  toast.style.left = '50%';
+  toast.style.transform = 'translateX(-50%)';
+  toast.style.background = 'rgba(0, 0, 0, 0.8)';
+  toast.style.color = 'white';
+  toast.style.padding = '10px 20px';
+  toast.style.borderRadius = '5px';
+  toast.style.fontSize = '14px';
+  toast.style.zIndex = '9999';
+  toast.style.opacity = '0';
+  toast.style.transition = 'opacity 0.3s ease';
+
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => {
+    toast.style.opacity = '1';
+  });
+
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    setTimeout(() => document.body.removeChild(toast), 300);
+  }, 2000);
+}
+</script>
+</body>
+</html>

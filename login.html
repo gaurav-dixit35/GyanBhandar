@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Gyan Bhandar</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="background-animation"></div>
+    
+    <div class="container">
+        <h1>Welcome to <span>Gyan Bhandar</span></h1>
+        <h1 class="subtext">Your favorite book store</h1>
+
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Enter your username">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="Enter your password">
+        </div>
+
+        <button class="btn" onclick="login()" id="loginBtn" disabled>Log In</button>
+        <button class="btn secondary" onclick="window.location.href='create.html'">Create New Account</button>
+        <p>By creating an account you agree to our <a href="term.html">Terms & Conditions</a></p>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>

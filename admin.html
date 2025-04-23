@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Panel</title>
+<link href="admin.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container">
+<h1>Admin Panel</h1>
+<h2>Add Book</h2>
+<div class="form-group">
+<input id="bookTitle" placeholder="Book Title" type="text"/>
+</div>
+<div class="form-group">
+<input id="bookPrice" placeholder="Price" type="number"/>
+</div>
+<div class="form-group"><textarea id="bookDescription" placeholder="Book Description" rows="3" style="width: 90%; margin-top: 8px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px;"></textarea>
+</div>
+<!--updated-->
+<div class="form-group">
+  <select id="bookCategory">
+    <option value="fiction">Fiction</option>
+    <option value="non-fiction" selected>Non-Fiction</option>
+    <option value="science">Science</option>
+  </select>
+</div>
+<div class="form-group">
+  <input id="bookRating" type="number" placeholder="Rating (0.0 - 5.0)" min="0" max="5" step="0.1" value="4.0" />
+</div>
+
+<!--updated-->
+
+<div class="form-group">
+  <input accept="image/*" id="bookImage" type="file"/>
+</div>
+<button class="add-btn" onclick="addBook()">Add Book</button>
+<button class="home-btn" onclick="goToHome()">Go to Home Page</button>
+<h2>Book List</h2>
+<ul class="book-list" id="bookList"></ul>
+<h2>Manage Orders</h2>
+<div class="form-group">
+<select id="orderSelect">
+<option value="">Select an Order</option>
+</select>
+</div>
+<div id="orderTrackingControls" style="display:none;">
+<p>Update the selected order's tracking status:</p>
+<button onclick="updateTracking('shipped')">📦 Mark as Shipped</button>
+<button onclick="updateTracking('out')">🚚 Out for Delivery</button>
+<button onclick="updateTracking('delivered')">🏠 Mark as Delivered</button>
+<p id="trackingUpdateMsg" style="color: green; font-weight: bold; margin-top: 10px;"></p>
+</div>
+<button onclick="clearAllOrders()" style="background: crimson; color: white; margin-top: 20px;">Clear All Orders</button>
+</div>
+<script src="admin.js"></script>
+<script>
+    let selectedOrderId = "";
+
+    document.addEventListener("DOMContentLoaded", function () {
+      populateOrders();
+
+      document.getElementById("orderSelect").addEventListener("change", function () {
+        selectedOrderId = this.value;
+        document.getElementById("orderTrackingControls").style.display = selectedOrderId ? "block" : "none";
+      });
+    });
+
+    function populateOrders() {
+      const orders = JSON.parse(localStorage.getItem("multiOrders")) || [];
+      const select = document.getElementById("orderSelect");
+      select.innerHTML = '<option value="">Select an Order</option>';
+      orders.forEach(order => {
+        const opt = document.createElement("option");
+        opt.value = order.id;
+        opt.textContent = order.id;
+        select.appendChild(opt);
+      });
+    }
+
+    function updateTracking(stage) {
+      if (!selectedOrderId) return;
+      let orders = JSON.parse(localStorage.getItem("multiOrders")) || [];
+      const orderIndex = orders.findIndex(o => o.id === selectedOrderId);
+      if (orderIndex === -1) return;
+
+      const tracking = orders[orderIndex].tracking;
+      if (stage === "shipped") tracking.shipped = true;
+      if (stage === "out") {
+        tracking.shipped = true;
+        tracking.out = true;
+      }
+      if (stage === "delivered") {
+        tracking.shipped = true;
+        tracking.out = true;
+        tracking.delivered = true;
+      }
+
+      localStorage.setItem("multiOrders", JSON.stringify(orders));
+      const msg = document.getElementById("trackingUpdateMsg");
+      msg.textContent = `✅ ${selectedOrderId} updated to: ${stage.toUpperCase()}`;
+      setTimeout(() => (msg.textContent = ""), 3000);
+    }
+
+    function clearAllOrders() {
+      if (confirm("Are you sure you want to delete all orders?")) {
+        localStorage.removeItem("multiOrders");
+        alert("All orders have been cleared.");
+        populateOrders();
+        document.getElementById("orderTrackingControls").style.display = "none";
+        document.getElementById("trackingUpdateMsg").textContent = "";
+      }
+    }
+  </script>
+</body>
+</html>

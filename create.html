@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 105vh;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(-45deg, #87CEFA, #1E3A8A, #00BFFF, #0D47A1);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease-in-out infinite alternate;
+        }
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .container {
+            max-width: 450px;
+            background: #ffffff;
+            padding: 30px;
+            margin-top: 25px;
+            margin-bottom: 65px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+            position: relative;
+            z-index: 10;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 { color: #333; font-weight: 700; margin-bottom: 25px; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        label { font-weight: 600; }
+        input {
+            width: 93%;
+            padding: 12px;
+            margin-top: 5px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            outline: none;
+            font-size: 16px;
+            background: #f3f3f3;
+        }
+        input:focus {
+            border-color: #578FCA;
+            box-shadow: 0 0 10px rgba(37, 117, 252, 0.5);
+        }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            background: linear-gradient(to right, #578FCA, #2575fc);
+            box-shadow: 0 0 10px rgba(37, 117, 252, 0.5);
+            transition: 0.3s ease;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 5px 20px rgba(37, 117, 252, 0.5);
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn.secondary {
+            background: #e0e0e0;
+            color: #333;
+            box-shadow: none;
+        }
+        .btn.secondary:hover { background: #d0d0d0; }
+        .tooltip {
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            background: #2575fc;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .show-tooltip { opacity: 1; }
+    </style>
+    <script>
+        function createAccount() {
+            let name = document.getElementById("name").value.trim();
+            let surname = document.getElementById("surname").value.trim();
+            let mobile = document.getElementById("mobile").value.trim();
+            let dob = document.getElementById("dob").value.trim();
+            let address = document.getElementById("address").value.trim();
+            let town = document.getElementById("town").value.trim();
+
+            const nameRegex = /^[A-Za-z\s]+$/;
+            if (!nameRegex.test(name)) {
+                alert("Name should contain only letters and spaces.");
+                return;
+            }
+            if (!nameRegex.test(surname)) {
+                alert("Surname should contain only letters and spaces.");
+                return;
+            }
+
+            const mobileRegex = /^\d{10}$/;
+            if (!mobileRegex.test(mobile)) {
+                alert("Mobile number must be exactly 10 digits.");
+                return;
+            }
+
+            if (dob === "" || address === "" || town === "") {
+                alert("Please fill in all the fields before creating an account!");
+                return;
+            }
+
+            localStorage.setItem("username", name + " " + surname);
+            localStorage.setItem("accountCreated", "true");
+
+            setTimeout(() => {
+                document.getElementById("tooltip").classList.add("show-tooltip");
+                setTimeout(() => {
+                    alert("🎉 Your account has been created successfully!");
+                    document.getElementById("tooltip").classList.remove("show-tooltip");
+                    window.location.href = 'login.html';
+                }, 2000);
+            }, 500);
+        }
+
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</head>
+<body>
+    <div class="background-animation"></div>
+    <div class="container">
+        <h1>Create Account</h1>
+        <span id="tooltip" class="tooltip">Processing...</span>
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+            <label for="surname">Surname:</label>
+            <input type="text" id="surname" placeholder="Enter your surname">
+        </div>
+        <div class="form-group">
+            <label for="mobile">Mobile No.:</label>
+            <input type="tel" id="mobile" placeholder="Enter your mobile number">
+        </div>
+        <div class="form-group">
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob">
+        </div>
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <input type="text" id="address" placeholder="Enter your address">
+        </div>
+        <div class="form-group">
+            <label for="town">Town:</label>
+            <input type="text" id="town" placeholder="Enter your town">
+        </div>
+        <button class="btn" onclick="createAccount()">Create Account</button>
+        <button class="btn secondary" onclick="goToHome()">Go to Home</button>
+    </div>
+</body>
+</html>

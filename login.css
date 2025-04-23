@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 105vh;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(-45deg, #87CEFA, #1E3A8A, #00BFFF, #0D47A1);
+    background-size: 400% 400%;
+    animation: gradientAnimation 10s ease-in-out infinite alternate;
+}
+
+/* Smooth Gradient Animation */
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+    width: 450px;
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #333;
+}
+
+h1 span {
+    color: #2575fc;
+}
+
+.subtext {
+    font-size: 20px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+label {
+    font-size: 17px; 
+    font-weight: 600;
+}
+
+input {
+    width: 93%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    background: #f3f3f3;
+    transition: all 0.3s ease-in-out;
+}
+
+input:focus {
+    border-color: #2575fc;
+    box-shadow: 0 0 10px rgba(37, 117, 252, 0.5);
+    background: white;
+}
+
+/* Buttons */
+.btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 8px;
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    background: linear-gradient(to right, #578FCA, #2575fc);
+    transition: all 0.3s ease-in-out;
+    margin-bottom: 5 px;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 5px 20px rgba(37, 117, 252, 0.5);
+}
+
+.btn.secondary {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    background: #e0e0e0;
+    color: #333;
+}
+
+.btn.secondary:hover {
+    background: #d0d0d0;
+}

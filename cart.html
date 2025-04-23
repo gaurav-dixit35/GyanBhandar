@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shopping Cart</title>
+  <link rel="stylesheet" href="cart.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+    function populateOrderDropdown() {
+      const orders = JSON.parse(localStorage.getItem("multiOrders")) || [];
+      const selector = document.getElementById("orderSelector");
+      selector.innerHTML = '<option value="">-- Select Order --</option>';
+
+      orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      orders.forEach(order => {
+        const option = document.createElement("option");
+        option.value = order.id;
+        const dateStr = new Date(order.createdAt).toLocaleString();
+        option.textContent = `${order.id} (Placed: ${dateStr})`;
+        selector.appendChild(option);
+      });
+
+      const savedOrderId = localStorage.getItem("lastOrderId");
+      if (savedOrderId) {
+        selector.value = savedOrderId;
+        displayTracking(savedOrderId);
+      }
+    }
+
+    function onOrderSelectChange() {
+      const selectedId = document.getElementById("orderSelector").value;
+      if (selectedId) {
+        localStorage.setItem("lastOrderId", selectedId);
+        displayTracking(selectedId);
+      }
+    }
+
+    function populateClearableOrders() {
+      const orders = JSON.parse(localStorage.getItem("multiOrders")) || [];
+      const list = document.getElementById("clear-orders-list");
+      list.innerHTML = "";
+
+      orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      orders.forEach(order => {
+        if (order.tracking.delivered) {
+          const li = document.createElement("li");
+          li.style.marginBottom = "8px";
+          const date = new Date(order.createdAt);
+          const formatted = date.toLocaleString();
+          li.innerHTML = `
+            <span style="margin-right: 10px;">${order.id} (Placed: ${formatted})</span>
+            <button onclick="clearOrder('${order.id}')" style="background-color: crimson; color: white; border: none; padding: 5px 10px; border-radius: 5px;">Remove</button>
+          `;
+          list.appendChild(li);
+        }
+      });
+    }
+
+    function clearOrder(orderId) {
+      let orders = JSON.parse(localStorage.getItem("multiOrders")) || [];
+      orders = orders.filter(order => order.id !== orderId);
+      localStorage.setItem("multiOrders", JSON.stringify(orders));
+
+      const lastId = localStorage.getItem("lastOrderId");
+      if (lastId === orderId) {
+        localStorage.removeItem("lastOrderId");
+      }
+
+      Swal.fire("✅ Cleared tracking for " + orderId);
+      populateOrderDropdown();
+      populateClearableOrders();
+      document.getElementById("tracking-status").style.display = "none";
+    }
+
+    function clearAllDeliveredOrders() {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "This will remove tracking info for all delivered orders.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, clear them all!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          let orders = JSON.parse(localStorage.getItem("multiOrders")) || [];
+          const lastId = localStorage.getItem("lastOrderId");
+
+          const updated = orders.filter(order => !order.tracking.delivered);
+          localStorage.setItem("multiOrders", JSON.stringify(updated));
+
+          if (lastId && orders.find(o => o.id === lastId && o.tracking.delivered)) {
+            localStorage.removeItem("lastOrderId");
+          }
+
+          Swal.fire('✅ Cleared all delivered orders!');
+          populateOrderDropdown();
+          populateClearableOrders();
+          document.getElementById("tracking-status").style.display = "none";
+        }
+      });
+    }
+
+</script>
+</head>
+<body>
+  <div class="cart-container">
+    <h1>Shopping Cart 🛒</h1>
+    <div id="cart-items"></div>
+    <div class="cart-summary">
+      <h2>Total: <span id="cart-total">Rs.0</span></h2>
+      <div class="coupon-box">
+        <input type="text" id="coupon" placeholder="Enter discount code" />
+        <button onclick="applyDiscount()">Apply</button>
+      </div>
+      <button class="checkout-btn">Proceed to Payment</button>
+      <button onclick="clearCart()" class="clear-btn">Clear Cart</button>
+      <button onclick="goToHome()" class="home-btn">Go to Home</button>
+    </div>
+
+    
+    <div style="margin-top: 20px; text-align: left;">
+      <label for="orderSelector"><strong>Select Order to Track:</strong></label>
+      <select id="orderSelector" onchange="onOrderSelectChange()" style="margin-left: 10px; padding: 6px; border-radius: 6px;">
+        <option value="">-- Select Order --</option>
+      </select>
+      <button onclick="clearAllDeliveredOrders()" style="margin-left: 10px; background-color: darkred; color: white; padding: 6px 12px; border: none; border-radius: 6px;">Clear All Delivered Orders</button>
+    </div>
+
+    <div id="tracking-status" style="display:none; margin-top: 30px; text-align: left;">
+      <h3>Order Tracking</h3>
+      <p id="order-id-display" style="font-weight: bold;"></p>
+      <ul id="tracking-steps">
+        <li id="step-ordered">✅ Ordered</li>
+        <li id="step-shipped">📦 Shipped</li>
+        <li id="step-out">🚚 Out for Delivery</li>
+        <li id="step-delivered">🏠 Delivered</li>
+      </ul>
+    </div>
+  </div>
+
+  
+    <div style="margin-top: 20px; text-align: left;">
+            <ul id="clear-orders-list" style="list-style: none; padding: 0;"></ul>
+    </div>
+
+  <div id="undo-toast" class="hidden"></div>
+
+  <script>
+let currentOrderId = null;
+let discount = 0;
+
+document.addEventListener("DOMContentLoaded", function () {
+  populateOrderDropdown();
+  populateClearableOrders();
+  loadCart();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  let orderId = urlParams.get("orderId");
+  if (!orderId) {
+    orderId = localStorage.getItem("lastOrderId");
+  }
+  if (orderId) {
+    displayTracking(orderId);
+  }
+
+  document.querySelector(".checkout-btn").addEventListener("click", function (e) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (cart.length === 0) {
+      e.preventDefault();
+      Swal.fire({
+        icon: 'warning',
+        title: 'Cart is Empty!',
+        text: 'Please add items to your cart before proceeding.',
+      }).then(() => {
+        window.location.href = "shop.html";
+      });
+      return;
+    }
+    window.location.href = 'payment.html';
+  });
+});
+
+function goToHome() {
+  window.location.href = "index.html";
+}
+
+function loadCart() {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let cartContainer = document.getElementById("cart-items");
+  let total = 0;
+  cartContainer.innerHTML = "";
+
+  if (cart.length === 0) {
+    cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+    document.getElementById("cart-total").textContent = `Rs.0`;
+    return;
+  }
+
+  const grouped = {};
+  cart.forEach(item => {
+    if (grouped[item.title]) {
+      grouped[item.title].quantity += 1;
+      grouped[item.title].totalPrice += parseFloat(item.price);
+    } else {
+      grouped[item.title] = {
+        ...item,
+        quantity: 1,
+        totalPrice: parseFloat(item.price)
+      };
+    }
+  });
+
+  Object.keys(grouped).forEach((title) => {
+    const item = grouped[title];
+    total += item.totalPrice;
+    cartContainer.innerHTML += `
+      <div class="cart-item animate-fade">
+        <img src="${item.image}" alt="${item.title}" class="cart-image">
+        <div class="cart-details">
+          <p><strong>${item.title}</strong> × ${item.quantity}</p>
+          <p>Price: Rs${(item.totalPrice / item.quantity).toFixed(2)} each</p>
+          <p>Total: Rs${item.totalPrice.toFixed(2)}</p>
+          <div class="quantity-controls">
+            <button onclick="changeQty('${item.title}', -1)">-</button>
+            <button onclick="changeQty('${item.title}', 1)">+</button>
+          </div>
+        </div>
+        <button class="remove-btn" onclick="removeGroupedItem('${item.title}')">Remove All</button>
+      </div>
+    `;
+  });
+
+  total -= discount;
+  document.getElementById("cart-total").textContent = `Rs${total.toFixed(2)}`;
+}
+
+function changeQty(title, amount) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  if (amount > 0) {
+    const item = cart.find(i => i.title === title);
+    if (item) cart.push(item);
+  } else {
+    const index = cart.findIndex(i => i.title === title);
+    if (index > -1) cart.splice(index, 1);
+  }
+  localStorage.setItem("cart", JSON.stringify(cart));
+  loadCart();
+}
+
+function removeGroupedItem(title) {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const removedItems = cart.filter(item => item.title === title);
+  localStorage.setItem("undo_items", JSON.stringify(removedItems));
+  const updatedCart = cart.filter(item => item.title !== title);
+  localStorage.setItem("cart", JSON.stringify(updatedCart));
+  showUndoToast(title);
+  loadCart();
+}
+
+function showUndoToast(title) {
+  Swal.fire({
+    toast: true,
+    icon: 'info',
+    title: `${title} removed`,
+    showConfirmButton: true,
+    confirmButtonText: 'Undo',
+    timer: 5000
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const undoItems = JSON.parse(localStorage.getItem("undo_items")) || [];
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart = cart.concat(undoItems);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      loadCart();
+    }
+    localStorage.removeItem("undo_items");
+  });
+}
+
+function clearCart() {
+  localStorage.removeItem("cart");
+  localStorage.removeItem("cart_discount");
+  Swal.fire("Cart cleared!");
+  loadCart();
+}
+
+function applyDiscount() {
+  const code = document.getElementById("coupon").value.trim();
+  if (code === "GK10") {
+    discount = 10;
+    localStorage.setItem("cart_discount", discount);
+    Swal.fire("Discount applied: Rs10 off!");
+    loadCart();
+  } else {
+    Swal.fire("Invalid discount code");
+  }
+}
+
+function displayTracking(orderId) {
+  document.getElementById("tracking-status").style.display = "block";
+  document.getElementById("order-id-display").textContent = `Order ID: ${orderId}`;
+  updateTrackingUI(orderId);
+}
+
+function updateTrackingUI(orderId) {
+  const orders = JSON.parse(localStorage.getItem("multiOrders")) || [];
+  const order = orders.find(o => o.id === orderId);
+  if (!order) return;
+
+  document.getElementById("step-ordered").style.opacity = order.tracking.ordered ? 1 : 0.3;
+  document.getElementById("step-shipped").style.opacity = order.tracking.shipped ? 1 : 0.3;
+  document.getElementById("step-out").style.opacity = order.tracking.out ? 1 : 0.3;
+  document.getElementById("step-delivered").style.opacity = order.tracking.delivered ? 1 : 0.3;
+}
+
+function populateOrderDropdown() {
+  const orders = JSON.parse(localStorage.getItem("multiOrders")) || [];
+  const selector = document.getElementById("orderSelector");
+  selector.innerHTML = '<option value="">-- Select Order --</option>';
+
+  orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  orders.forEach(order => {
+    const option = document.createElement("option");
+    option.value = order.id;
+    const dateStr = new Date(order.createdAt).toLocaleString();
+    option.textContent = `${order.id} (Placed: ${dateStr})`;
+    selector.appendChild(option);
+  });
+
+  const savedOrderId = localStorage.getItem("lastOrderId");
+  if (savedOrderId) {
+    selector.value = savedOrderId;
+    displayTracking(savedOrderId);
+  }
+}
+
+function onOrderSelectChange() {
+  const selectedId = document.getElementById("orderSelector").value;
+  if (selectedId) {
+    localStorage.setItem("lastOrderId", selectedId);
+    displayTracking(selectedId);
+  }
+}
+
+function clearOrder(orderId) {
+  let orders = JSON.parse(localStorage.getItem("multiOrders")) || [];
+  orders = orders.filter(order => order.id !== orderId);
+  localStorage.setItem("multiOrders", JSON.stringify(orders));
+
+  const lastId = localStorage.getItem("lastOrderId");
+  if (lastId === orderId) {
+    localStorage.removeItem("lastOrderId");
+  }
+
+  Swal.fire("✅ Cleared tracking for " + orderId);
+  populateOrderDropdown();
+  populateClearableOrders();
+  document.getElementById("tracking-status").style.display = "none";
+}
+
+function populateClearableOrders() {
+  const orders = JSON.parse(localStorage.getItem("multiOrders")) || [];
+  const list = document.getElementById("clear-orders-list");
+  list.innerHTML = "";
+
+  orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  orders.forEach(order => {
+    if (order.tracking.delivered) {
+      const li = document.createElement("li");
+      li.style.marginBottom = "8px";
+      const date = new Date(order.createdAt);
+      const formatted = date.toLocaleString();
+      li.innerHTML = `
+        <span style="margin-right: 10px;">${order.id} (Placed: ${formatted})</span>
+        <button onclick="clearOrder('${order.id}')" style="background-color: crimson; color: white; border: none; padding: 5px 10px; border-radius: 5px;">Remove</button>
+      `;
+      list.appendChild(li);
+    }
+  });
+}
+
+function clearAllDeliveredOrders() {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "This will remove tracking info for all delivered orders.",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, clear them all!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      let orders = JSON.parse(localStorage.getItem("multiOrders")) || [];
+      const lastId = localStorage.getItem("lastOrderId");
+
+      const updated = orders.filter(order => !order.tracking.delivered);
+      localStorage.setItem("multiOrders", JSON.stringify(updated));
+
+      if (lastId && orders.find(o => o.id === lastId && o.tracking.delivered)) {
+        localStorage.removeItem("lastOrderId");
+      }
+
+      Swal.fire('✅ Cleared all delivered orders!');
+      populateOrderDropdown();
+      populateClearableOrders();
+      document.getElementById("tracking-status").style.display = "none";
+    }
+  });
+}
+</script>
+</body>
+</html>

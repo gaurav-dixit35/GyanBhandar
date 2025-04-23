@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secure Payment</title>
+  <link rel="stylesheet" href="payment.css" />
+</head>
+<body>
+<div class="container">
+  <form id="paymentForm">
+    <div class="row">
+      <div class="col">
+        <h3 class="title">Billing Address</h3>
+
+        <div class="inputBox">
+          <span>full name :</span>
+          <input type="text" placeholder="Full Name" pattern="[A-Za-z ]+" required />
+        </div>
+        <div class="inputBox">
+          <span>email :</span>
+          <input type="email" placeholder="example@example.com" required />
+        </div>
+        <div class="inputBox">
+          <span>address :</span>
+          <input type="text" placeholder="Room - Street - Locality" pattern="[A-Za-z0-9 ,.\-]+" required />
+        </div>
+        <div class="inputBox">
+          <span>city :</span>
+          <input type="text" placeholder="Mumbai" pattern="[A-Za-z ]+" required />
+        </div>
+
+        <div class="flex">
+          <div class="inputBox">
+            <span>state :</span>
+            <input type="text" placeholder="Maharashtra" pattern="[A-Za-z ]+" required />
+          </div>
+          <div class="inputBox">
+            <span>zip code :</span>
+            <input type="text" placeholder="123456" pattern="\d{6}" required />
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="col">
+        <h3 class="title">Payment</h3>
+
+        <div class="inputBox">
+          <span>cards accepted :</span>
+          <select required>
+            <option value="">Select Card</option>
+            <option value="visa">Visa</option>
+            <option value="mastercard">MasterCard</option>
+            <option value="rupay">RuPay</option>
+            <option value="amex">American Express</option>
+          </select>
+        </div>
+        <div class="inputBox">
+          <span>name on card :</span>
+          <input type="text" placeholder="Name On Card" pattern="[A-Za-z ]+" required />
+        </div>
+        <div class="inputBox">
+          <span>credit card number :</span>
+          <input type="text" placeholder="1111-2222-3333-4444" pattern="\d{4}-\d{4}-\d{4}-\d{4}" required />
+        </div>
+        <div class="inputBox">
+          <span>exp month :</span>
+          <input type="text" placeholder="January" pattern="[A-Za-z]+" required />
+        </div>
+
+        <div class="flex">
+          <div class="inputBox">
+            <span>exp year :</span>
+            <input type="number" placeholder="2025" min="2025" required />
+          </div>
+          <div class="inputBox">
+            <span>CVV :</span>
+            <input type="text" placeholder="123" pattern="\d{3,4}" required />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div id="payment-summary" style="font-size: 18px; margin: 10px 0; text-align: center;"></div>
+    <div class="button-group" style="display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: nowrap;">
+      <a href="index.html" class="home-btn">Go to Home</a>
+      <button type="button" class="submit-btn" onclick="completeCheckout()">Proceed to Checkout</button>
+      <a href="cart.html" class="cancel-btn-new">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<div class="modal" id="successModal">
+  <div class="modal-content">
+    <h2>💳 Payment Successful!</h2>
+    <p id="success-msg">Your order is being processed. Redirecting...</p>
+    <button class="cancel-btn" onclick="cancelRedirect()">Cancel</button>
+  </div>
+</div>
+
+<script>
+let redirectTimeout;
+
+function completeCheckout() {
+  if (!document.getElementById('paymentForm').checkValidity()) {
+    document.getElementById('paymentForm').reportValidity();
+    return;
+  }
+
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const total = cart.reduce((sum, item) => sum + parseFloat(item.price), 0).toFixed(2);
+  const count = cart.length;
+
+  const modal = document.getElementById("successModal");
+  modal.classList.add("active");
+
+  const successMsg = document.getElementById("success-msg");
+  successMsg.textContent = `Your payment of Rs.${total} for ${count} book${count !== 1 ? 's' : ''} was successful. Redirecting...`;
+
+  const orders = JSON.parse(localStorage.getItem("multiOrders")) || [];
+  const orderId = "order_" + String(orders.length + 1).padStart(3, '0');
+
+  const newOrder = {
+    id: orderId,
+    createdAt: new Date().toISOString(),
+    tracking: {
+      ordered: true,
+      shipped: false,
+      out: false,
+      delivered: false
+    }
+  };
+
+  orders.push(newOrder);
+  localStorage.setItem("multiOrders", JSON.stringify(orders));
+  localStorage.setItem("lastOrderId", orderId);
+
+  // ✅ Clear the cart after successful payment
+  localStorage.removeItem("cart");
+
+  redirectTimeout = setTimeout(() => {
+    window.location.href = "cart.html?orderId=" + orderId;
+  }, 2000);
+}
+
+function cancelRedirect() {
+  clearTimeout(redirectTimeout);
+  document.getElementById("successModal").classList.remove("active");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const discount = localStorage.getItem("cart_discount") ? parseFloat(localStorage.getItem("cart_discount")) : 0;
+
+  const totalOriginal = cart.reduce((sum, item) => sum + parseFloat(item.price), 0);
+  const finalTotal = (totalOriginal - discount).toFixed(2);
+  const count = cart.length;
+
+  const summary = document.getElementById("payment-summary");
+  summary.innerHTML = `
+    <p>You have <strong>${count} book${count !== 1 ? 's' : ''}</strong> in your cart.</p>
+    <p>Original Total: <del>Rs.${totalOriginal.toFixed(2)}</del></p>
+    <p><strong>Payable Now: Rs.${finalTotal}</strong></p>
+  `;
+});
+</script>
+</body>
+</html>

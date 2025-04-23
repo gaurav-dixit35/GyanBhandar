@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gyan Bhandar - Shop</title>
+  <link href="shop.css" rel="stylesheet" />
+  <script defer src="shop.js"></script>
+  
+</head>
+<body>
+  <header>
+    <div class="nav-top">
+  <div class="nav-brand">Gyaan Bhandar</div>
+  <div style="position: relative;">
+    <input id="searchBar" placeholder="Search books..." type="text"
+           style="padding: 10px 45px 10px 10px; width: 300px; border-radius: 5px; border: 1px solid #ccc;" />
+    <button id="voiceBtn" title="Speak to search"
+            style="position: absolute; right: 5px; top: 5px; background: #fff; border: none; cursor: pointer; transition: transform 0.3s ease;"
+            onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+      <span id="micIcon" style="display: flex; align-items: center;"><svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="#305CDE" viewBox="0 0 24 24">
+  <path d="M12 14q-.825 0-1.412-.587Q10 12.825 10 12V6q0-.825.588-1.412Q11.175 4 12 4q.825 0 1.413.588Q14 5.175 14 6v6q0 .825-.587 1.413Q12.825 14 12 14Zm-1 7v-3.075q-2.875-.35-4.437-2.238Q5 13.8 5 11.25h2q0 2.075 1.463 3.413Q9.925 16 12 16q2.075 0 3.538-1.337Q17 13.325 17 11.25h2q0 2.55-1.562 4.437Q15.875 17.55 13 17.9V21Zm1-9Z"/>
+</svg></span>
+    </button>
+  </div>
+</div>
+    <p id="noResults" style="color: crimson; font-weight: bold; display: none; text-align: center;">📚 Oops! No books found for your search.</p>
+    <div class="nav-buttons">
+      <button onclick="location.href='index.html'">Back</button>
+      <div style="display: flex; gap: 10px;">
+        <button onclick="location.href='wishlist.html'">
+          ❤️ <span class="wishlist-counter" id="wishlist-count"></span>
+        </button>
+        <button onclick="location.href='cart.html'">
+          🛒 <span class="cart-counter" id="cart-count"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="shop-container">
+    <aside class="filter-panel">
+      <h3>Filter Books</h3>
+      <label>Category:</label>
+      <select id="category-filter">
+        <option value="all">All</option>
+        <option value="fiction">Fiction</option>
+        <option value="non-fiction">Non-Fiction</option>
+        <option value="science">Science</option>
+      </select>
+      <br/><br/>
+      <label>Price Range:</label>
+      <input id="min-price" placeholder="Min Price" type="number" />
+      <input id="max-price" placeholder="Max Price" type="number" />
+      <br/><br/>
+      <button id="apply-filter">Apply Filter</button>
+      <button onclick="resetFilters()">Clear Filters</button>
+      <br/><br/>
+      <label>Sort By:</label>
+      <select id="sort-options">
+        <option value="default">Sort by</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="title-asc">Title: A-Z</option>
+        <option value="title-desc">Title: Z-A</option>
+        <option value="rating-desc">Rating: High to Low</option>
+      </select>
+    </aside>
+    <div class="book-list" id="book-list"></div>
+  </div>
+
+
+
+</body>
+</html>

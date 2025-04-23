@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Store</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+    
+<!-- header section starts  -->
+
+<header class="header">
+
+    <div class="header-1">
+
+        <a href="#" class="logo"> <i class="fas fa-book"></i> Gyaan Bhandar </a>
+
+        <form action="#" class="search-form" id="main-search-form">
+            <input type="search" placeholder="Search books..." id="search-box">
+            <label for="search-box" class="fas fa-search"></label>
+    
+        </form>
+
+        <div class="icons">
+<div class="user-login-container">
+  <div id="user-circle" class="user-circle"></div>
+  <div id="user-dropdown" class="user-dropdown">
+    <button id="loginToggleBtn" class="btn"></button>
+  </div>
+</div>
+
+            <div id="search-btn" class="fas fa-search"></div>
+            <a href="cart.html" class="fas fa-shopping-cart"></a>
+            <div id="login-btn" class="fas fa-user"></div>
+            <button class="admin-btn" onclick="goToAdmin()"><a href="#" class="fas fa-crown"></a>
+            </button>
+            <script>
+                function goToAdmin() {
+                    const password = prompt("Enter Admin Password:");
+                    if (password === "1234") {
+                        window.location.href = "admin.html";
+                    } else {
+                        alert("Incorrect password!");
+                    }
+                }
+            </script>
+                        
+        </div>
+
+    </div>
+    
+    <div class="header-2">
+        <nav class="navbar" style="padding-left: 125px;">
+            <a href="#home">Home</a>
+            <a href="#featured">Featured</a>
+            <a href="#arrivals">Arrivals</a>
+            <a href="#reviews">Reviews</a>
+            <a href="#blogs">Blogs</a>
+            <a href="us.html">About Us</a>
+            <a href="rate.html">Rate Us</a>
+        </nav>
+    </div>
+
+</header>
+
+<!-- header section ends -->
+
+<!-- bottom navbar  -->
+
+
+
+<!-- login form  -->
+
+<div class="login-form-container">
+
+    <div id="close-login-btn" class="fas fa-times"></div>
+
+    <a href="login.html" class="btn">Login</a>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let storedUsername = localStorage.getItem("username");
+            if (storedUsername) {
+                document.getElementById("userDisplay").innerText = "Welcome, " + storedUsername + "!";
+                document.getElementById("loginBtn").style.display = "none"; // Hide login button if logged in
+                document.getElementById("logoutBtn").style.display = "block"; // Show logout button
+            }
+        });
+    
+        function logout() {
+            localStorage.clear();
+            alert("You are logged out!");
+            window.location.reload();
+        }
+    </script>
+<div id="userDisplay"></div>
+<button class="btn logout" id="logoutBtn" style="display: none;" onclick="logout()">Logout</button>
+    
+
+</div>
+
+<!-- home section starts  -->
+
+<section class="home" id="home">
+
+    <div class="row">
+
+        <div class="content">
+            <h3>Upto 75% off</h3>
+            <p>Huge discounts plus free delivery.</p>
+            <a href="shop.html" class="btn">Shop now</a>
+        </div>
+
+        <div class="swiper books-slider">
+            <div class="swiper-wrapper">
+                <a href="#" class="swiper-slide"><img src="image/book-1.png" alt=""></a>
+                <a href="#" class="swiper-slide"><img src="image/book-2.png" alt=""></a>
+                <a href="#" class="swiper-slide"><img src="image/book-3.png" alt=""></a>
+                <a href="#" class="swiper-slide"><img src="image/book-4.png" alt=""></a>
+                <a href="#" class="swiper-slide"><img src="image/book-5.png" alt=""></a>
+                <a href="#" class="swiper-slide"><img src="image/book-6.png" alt=""></a>
+            </div>
+            <img src="image/stand.png" class="stand" alt="">
+        </div>
+
+    </div>
+
+</section>
+
+<!-- home section ense  -->
+
+<!-- icons section starts  -->
+
+<section class="icons-container">
+
+    <div class="icons">
+        <i class="fas fa-shipping-fast"></i>
+        <div class="content">
+            <h3>Free Shipping</h3>
+            <p>Order over Rs.1000</p>
+        </div>
+    </div>
+
+    <div class="icons">
+        <i class="fas fa-lock"></i>
+        <div class="content">
+            <h3>Secure Payment</h3>
+            <p>100% Secure Payment</p>
+        </div>
+    </div>
+
+    <div class="icons">
+        <i class="fas fa-redo-alt"></i>
+        <div class="content">
+            <h3>Easy Returns</h3>
+            <p>10 days returns</p>
+        </div>
+    </div>
+
+    <div class="icons">
+        <i class="fas fa-headset"></i>
+        <div class="content">
+            <h3>24/7 Support</h3>
+            <p>Call Us Anytime</p>
+        </div>
+    </div>
+
+</section>
+
+<!-- icons section ends -->
+
+<!-- featured section starts  -->
+<section class="arrivals" id="arrivals">
+
+    <h1 class="heading"> <span>NEW ARRIVALS</span> </h1>
+
+    <div class="swiper arrivals-slider">
+
+        <div class="swiper-wrapper">
+
+            <a href="#" class="swiper-slide box">
+                <div class="image">
+                    <img src="image/book-1.png" alt="">
+                </div>
+                <div class="content">
+                    <h3>The Art City</h3>
+                    <div class="price">Rs.299 <span>Rs.599</span></div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="swiper-slide box">
+                <div class="image">
+                    <img src="image/book-2.png" alt="">
+                </div>
+                <div class="content">
+                    <h3>Thanks in Everything</h3>
+                    <div class="price">Rs.299<span>Rs.599</span></div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="swiper-slide box">
+                <div class="image">
+                    <img src="image/book-3.png" alt="">
+                </div>
+                <div class="content">
+                    <h3>Your Name</h3>
+                    <div class="price">Rs.299<span>Rs.599</span></div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="swiper-slide box">
+                <div class="image">
+                    <img src="image/book-4.png" alt="">
+                </div>
+                <div class="content">
+                    <h3>Art of War</h3>
+                    <div class="price">Rs.299<span>Rs.599</span></div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="swiper-slide box">
+                <div class="image">
+                    <img src="image/book-5.png" alt="">
+                </div>
+                <div class="content">
+                    <h3>Music!</h3>
+                    <div class="price">Rs.299<span>Rs.599</span></div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="swiper arrivals-slider">
+
+        <div class="swiper-wrapper">
+
+            <a href="#" class="swiper-slide box">
+                <div class="image">
+                    <img src="image/book-6.png" alt="">
+                </div>
+                <div class="content">
+                    <h3>Brief History of Time</h3>
+                    <div class="price">Rs.299<span>Rs.599</span></div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="swiper-slide box">
+                <div class="image">
+                    <img src="image/book-7.png" alt="">
+                </div>
+                <div class="content">
+                    <h3>Homo Sapiens</h3>
+                    <div class="price">Rs.299<span>Rs.599</span></div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="swiper-slide box">
+                <div class="image">
+                    <img src="image/book-8.png" alt="">
+                </div>
+                <div class="content">
+                    <h3>Obama's Adventures</h3>
+                    <div class="price">Rs.299<span>Rs.599</span></div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="swiper-slide box">
+                <div class="image">
+                    <img src="image/book-9.png" alt="">
+                </div>
+                <div class="content">
+                    <h3>Art of Life</h3>
+                    <div class="price">Rs.299<span>Rs.599</span></div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="swiper-slide box">
+                <div class="image">
+                    <img src="image/book-10.png" alt="">
+                </div>
+                <div class="content">
+                    <h3>Retro Life</h3>
+                    <div class="price">Rs.299<span>Rs.599</span></div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- featured section ends -->
+
+<!-- newsletter section starts -->
+
+<section class="newsletter"> 
+    <form action="" onsubmit="showPopup(event)">
+        <h3>Subscribe for latest updates</h3>
+        <input type="email" name="" placeholder="Enter your email" id="" class="box" required>
+        <input type="submit" value="subscribe" class="btn">
+    </form>
+</section>
+
+<script>
+    function showPopup(event) {
+        event.preventDefault(); // Prevents the form from submitting
+        alert("Thank you for Subscribing! Congratulation 🎉 you won a coupon of Rs10 more discount on total price [Coupon code GK10]");
+    }
+</script>
+
+<!-- newsletter section ends -->
+
+
+<!-- deal section starts  -->
+
+<section class="deal">
+
+    <div class="content">
+        <h3>Deal of the day</h3>
+        <h1>Upto 50% off</h1>
+        <p>If you buy any book on Saturday and Sunday you will get 50% off + free delivery.</p>
+        <a href="shop.html" class="btn">shop now</a>
+    </div>
+
+    <div class="image">
+        <img src="image/deal-img.jpg" alt="">
+    </div>
+
+</section>
+
+<!-- deal section ends -->
+
+<!-- reviews section starts  -->
+
+<section class="reviews" id="reviews">
+
+    <h1 class="heading"> <span>Client's Reviews</span> </h1>
+
+    <div class="swiper reviews-slider">
+
+        <div class="swiper-wrapper">
+
+            <div class="swiper-slide box">
+                <img src="image/pic-1.png" alt="">
+                <h3>Avinash</h3>
+                <p>Satisfied with my purchase.</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/pic-2.png" alt="">
+                <h3>Pranita</h3>
+                <p>Payment process is very easy and fast.</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/pic-3.png" alt="">
+                <h3>Prem</h3>
+                <p>The website is very good and responsive.</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+            <div class="swiper-slide box">
+                <img src="image/pic-4.png" alt="">
+                <h3>Shravani</h3>
+                <p>All the books available are original and very cheap.</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/pic-5.png" alt="">
+                <h3>Deven</h3>
+                <p>These deals are a great opportunity to save money.</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/pic-6.png" alt="">
+                <h3>Priya</h3>
+                <p>The website has a wide variety of genres.</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    
+</section>
+
+<!-- reviews section ends -->
+
+<!-- blogs section starts  -->
+
+<section class="blogs" id="blogs">
+
+    <h1 class="heading"> <span>our blogs</span> </h1>
+
+    <div class="swiper blogs-slider">
+
+        <div class="swiper-wrapper">
+
+            <div class="swiper-slide box">
+                <div class="image">
+                    <img src="image/blog-1.jpg" alt="">
+                </div>
+                <div class="content">
+                    <h3>A little blog of books.</h3>
+                    <p>Reading is very beneficial for our life. We should read a book daily, it sharpens the mind.</p>
+                    <a href="https://alittleblogofbooks.com/" class="btn">read more</a>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <div class="image">
+                    <img src="image/blog-2.jpg" alt="">
+                </div>
+                <div class="content">
+                    <h3>The Wertzone.</h3>
+                    <p>Read a book daily to sharpen your mind and increase your intelligence.</p>
+                    <a href="https://thewertzone.blogspot.com/" class="btn">read more</a>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <div class="image">
+                    <img src="image/blog-3.jpg" alt="">
+                </div>
+                <div class="content">
+                    <h3>A New Yorker's blog</h3>
+                    <p>One of the most famous blog website.</p>
+                    <a href="https://www.newyorker.com/books/page-turner" class="btn">read more</a>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <div class="image">
+                    <img src="image/blog-4.jpg" alt="">
+                </div>
+                <div class="content">
+                    <h3>Blogs focused on speculative and fiction.</h3>
+                    <p>Books are a uniquely portable magic. Dive into the world of fiction with this blog.</p>
+                    <a href="https://www.thebooksmugglers.com/" class="btn">read more</a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- blogs section ends -->
+
+<!-- footer section starts  -->
+
+<section class="footer">
+
+
+    <div class="share">
+        <a href="https://www.instagram.com/stfucumar" class="fab fa-instagram"></a>
+        <a href="https://www.linkedin.com/in/kumar-tambe-556340256/" class="fab fa-linkedin"></a>
+        <a href="https://www.instagram.com/g_dixit_28" class="fab fa-instagram"></a>
+        <a href="https://www.linkedin.com/in/gaurav-dixit-3b0164229/" class="fab fa-linkedin"></a>      
+    </div>
+
+    <div class="credit">   created by <span>Gaurav Dixit and Kumar Tambe</span> &copy; | all rights reserved! </div>
+
+</section>
+
+<!-- footer section ends -->
+
+<!-- loader  -->
+
+
+<div class="loader-container">
+    <img src="image/loader-img.gif" alt="">
+</div>
+<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+<!-- custom js file link  -->
+<script src="js/script.js"></script>
+<script src="index.js"></script>
+
+
+<style>
+.user-login-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 1.5rem;
+}
+
+.user-circle {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: var(--green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: none;
+  flex-direction: column;
+  z-index: 100;
+}
+
+.user-dropdown .btn {
+  background: none;
+  border: none;
+  padding: 10px 15px;
+  font-size: 1.4rem;
+  color: var(--black);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.user-dropdown .btn:hover {
+  background-color: #f1f1f1;
+}
+
+/* Hide old login icon */
+#login-btn {
+  display: none !important;
+}
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const circle = document.getElementById("user-circle");
+    const dropdown = document.getElementById("user-dropdown");
+    const toggleBtn = document.getElementById("loginToggleBtn");
+    const username = localStorage.getItem("username");
+
+    if (username) {
+      const firstInitial = username.trim()[0].toUpperCase();
+      circle.innerHTML = firstInitial;
+      toggleBtn.innerText = "Logout";
+      toggleBtn.onclick = () => {
+        localStorage.clear();
+        alert("You are logged out!");
+        location.reload();
+      };
+    } else {
+      circle.innerHTML = '<i class="fas fa-user"></i>';
+      toggleBtn.innerText = "Login";
+      toggleBtn.onclick = () => {
+        const loginForm = document.querySelector('.login-form-container');
+        if (loginForm) loginForm.classList.toggle('active');
+      };
+    }
+
+    circle.addEventListener("click", () => {
+      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    });
+
+    window.addEventListener("click", (e) => {
+      if (!circle.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = "none";
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
