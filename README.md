@@ -75,30 +75,44 @@ bash
 Copy
 Edit
 Gyan-Bhandar/
-│
+
 ├── index.html              # Homepage
+
 ├── shop.html               # Book listing page
+
 ├── wishlist.html           # Wishlist page
+
 ├── cart.html               # Shopping cart
+
 ├── checkout.html           # Checkout process
+
 ├── admin-dashboard.html    # Admin dashboard
-│
+
 ├── css/
+
 │   └── style.css           # Main stylesheet
-│
+
 ├── js/
+
 │   ├── main.js             # Core JavaScript logic
+
 │   └── admin.js            # Admin dashboard logic
-│
+
 ├── assets/
+
 │   ├── images/             # Book and UI images
+
 │   └── icons/              # Icons used in UI
-│
+
+
 └── README.md               # Project documentation (this file)
+
 🧠 Inspiration
 This project was inspired by the growing demand for digital book stores and aims to provide a scalable and modular solution for independent booksellers or hobby developers looking to learn e-commerce web development.
 
 👨‍💻 Author
-[Your Name]
+Gaurav Dixit
 Frontend Web Developer | Book Lover | Code Explorer
 Feel free to connect or suggest improvements!
+
+New More Advance Updated Version will be uploaded soon ! Stay Tuned for new updateds...
