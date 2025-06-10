@@ -71,7 +71,8 @@ Gyan Bhandar replicates a real-world online bookstore with essential features li
 
 If you find a bug or issue in the project:
 
-1. Open a **new issue** with:
+1. Check the [Issues](https://github.com/gaurav-dixit35/gyan-bhandar/issues) tab (if hosted on GitHub) to see if it's already reported.
+2. If not, open a **new issue** with:
    - A clear title and description
    - Steps to reproduce
    - Screenshots (if applicable)
