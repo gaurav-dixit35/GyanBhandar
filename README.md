@@ -2,7 +2,7 @@
 
 **Gyan Bhandar** is a dynamic and responsive online book store built using **HTML**, **CSS**, and **JavaScript**. Designed for an engaging user experience, it enables visitors to explore, search, wishlist, and shop for books across multiple categories with ease. Whether you're a casual reader or a serious book lover, Gyan Bhandar offers a clean, intuitive e-commerce experience tailored for books.
 
-## Website Link
+## Visit Website 
  [**Gyan Bhandar**](https://gaurav-dixit35.github.io/GyanBhandar/)
 ---
 
